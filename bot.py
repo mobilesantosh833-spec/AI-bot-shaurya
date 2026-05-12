@@ -151,3 +151,22 @@ def ai_reply(message):
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
+                {"role": "system", "content": "You are a helpful AI assistant. Reply in the same language the user writes in."}
+            ] + user_histories[user_id]
+        )
+
+        reply = response.choices[0].message.content
+
+        user_histories[user_id].append({
+            "role": "assistant",
+            "content": reply
+        })
+
+        bot.reply_to(message, reply)
+
+    except Exception as e:
+        bot.reply_to(message, f"⚠️ Error: {e}")
+
+# ======================== START BOT ========================
+print("Bot is running...")
+bot.infinity_polling()
