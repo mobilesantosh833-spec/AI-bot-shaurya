@@ -151,3 +151,25 @@ def ai_reply(message):
         response = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
+                {
+                    "role": "system",
+                    "content": "Tum ek helpful AI assistant ho. Hinglish mein baat karo (Hindi + English mix). Clear aur helpful jawab do."
+                }
+            ] + user_histories[user_id]
+        )
+
+        reply = response.choices[0].message.content
+
+        user_histories[user_id].append({
+            "role": "assistant",
+            "content": reply
+        })
+
+        bot.reply_to(message, reply)
+
+    except Exception as e:
+        bot.reply_to(message, f"⚠️ Error aa gaya! Dobara try karo.\n`{str(e)}`", parse_mode="Markdown")
+
+# ======================== BOT START ========================
+print("✅ Shaurya ka bot chal raha hai... 🚀")
+bot.polling(none_stop=True)
